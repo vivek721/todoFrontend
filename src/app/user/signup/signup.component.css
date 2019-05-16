@@ -1,0 +1,14 @@
+.logonbody {
+  height: 100vh;
+  background-image: url("../../../assets/wall.jpg")
+}
+
+.card {
+  height: auto;
+  width: auto;
+  color: white;
+  background-color: rgba(29, 31, 22, 0.9) !important;
+  padding: 3%;
+  margin: 2px;
+  font-size: 1.2em;
+}

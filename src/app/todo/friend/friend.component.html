@@ -1,0 +1,60 @@
+<div class="fullBody">
+  <app-todo></app-todo>
+
+  <p-accordion>
+    <p-accordionTab header="Friends" [selected]="true">
+      <div class="row center-cols center-align d-flex justify-content-center">
+        <div class="col m4" *ngIf="friends != 0">
+          <div *ngFor="let friend of friends, let i = index">
+            <p-card [header]="[friend.friendName | titlecase]" [style]="{width: '200px'}" styleClass="ui-card-shadow">
+              <p-header>
+                <i class="pi pi-user d-flex justify-content-center" style="font-size: 4em"></i>
+              </p-header>
+              <p-footer class=" d-flex justify-content-center">
+                <button pButton type="button" label="View Todo" icon="pi pi-eye" class="ui-button-success"></button>
+              </p-footer>
+            </p-card>
+          </div>
+        </div>
+      </div>
+    </p-accordionTab>
+
+    <p-accordionTab header="Pending Requests">
+      <div class="row center-cols center-align d-flex justify-content-center">
+        <div class="col m4" *ngIf="recievedRequests != 0">
+          <div *ngFor="let requests of recievedRequests, let i = index">
+            <p-card [header]="[requests.userName]" [style]="{width: '250px'}" styleClass="ui-card-shadow">
+              <p-header>
+                <i class="pi pi-user d-flex justify-content-center" style="font-size: 4em"></i>
+              </p-header>
+              <p-footer>
+                <button pButton type="button" label="Accept" icon="pi pi-check" style="margin-right: .50em"
+                  (click)="acceptFriendRequest(requests.userId,requests.userName)"></button>
+                <button pButton type="button" label="Decline" icon="pi pi-times" class="ui-button-success"
+                  (click)="rejectFriendRequest(requests.userId,requests.userName)"></button>
+              </p-footer>
+            </p-card>
+          </div>
+        </div>
+      </div>
+    </p-accordionTab>
+    <p-accordionTab header="All Users">
+      <div class="row center-cols center-align d-flex justify-content-center">
+        <div class="col m4" *ngIf="allUsers != 0">
+          <div *ngFor="let user of allUsers, let i = index">
+            <p-card [header]="[user.firstName+' '+user.lastName | titlecase]" [style]="{width: '200px'}"
+              styleClass="ui-card-shadow">
+              <p-header>
+                <i class="pi pi-user d-flex justify-content-center" style="font-size: 4em"></i>
+              </p-header>
+              <p-footer class="d-flex justify-content-center">
+                <button pButton type="button" label="Add Friend" icon="pi pi-check"
+                  (click)="sendFriendRequest(user.userId, user.firstName+' '+user.lastName)"></button>
+              </p-footer>
+            </p-card>
+          </div>
+        </div>
+      </div>
+    </p-accordionTab>
+  </p-accordion>
+</div>

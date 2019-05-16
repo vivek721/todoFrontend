@@ -1,0 +1,38 @@
+.loginbody {
+  height: 100vh;
+  background-image: url("../../../assets/wall.jpg")
+}
+
+.card {
+  height: 520px;
+  width: 100%;
+  margin-top: 3%;
+  font-size: 1.5em;
+  margin-bottom: auto;
+  color: white;
+  width: 400px;
+  background-color: rgba(29, 31, 22, 0.9) !important;
+  padding: auto;
+}
+
+.login_btn {
+  color: black;
+  background-color: mediumorchid;
+  margin-top: 50px;
+  width: 100px;
+  float: right;
+}
+
+.login_btn:hover {
+  color: black;
+  background-color: white;
+}
+
+label {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.modal-title {
+  color: black;
+}

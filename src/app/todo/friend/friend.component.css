@@ -1,0 +1,13 @@
+.fullBody {
+  background-image: url("../../../assets/todoback.jpg");
+  height: 100%;
+}
+
+.center-cols>.col {
+  float: none;
+  /* disable the float */
+  display: inline-block;
+  /* make blocks inline-block */
+  text-align: initial;
+  /* restore text-align to default */
+}

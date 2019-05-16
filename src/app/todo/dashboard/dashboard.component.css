@@ -1,0 +1,75 @@
+.todoBody {
+  background-image: url("../../../assets/todoback.jpg");
+  height: 100%;
+}
+
+.createButton {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: auto;
+  padding: auto;
+  margin-top: 2%;
+  width: 40%;
+}
+
+.createInput {
+  position: relative;
+}
+
+.createInput input {
+  text-indent: 1px;
+}
+
+.createInput .pi {
+  position: absolute;
+  top: 10px;
+  right: 7px;
+  font-size: 15px;
+}
+
+.todolist {
+  color: black;
+  font-weight: bold;
+  margin-right: 20%;
+  font-size: 1.2em;
+  padding: 2%;
+  padding-right: -2%;
+  width: 100%;
+  margin-top: -3%
+}
+
+.todobutton {
+  color: black;
+  background-color: rgba(26, 67, 94, 0.5);
+  font-size: 1em;
+  width: 95%;
+  height: 35px
+}
+
+.todobutton:hover {
+  color: rgb(194, 124, 33)
+}
+
+#checkbox {
+  height: 12px;
+  width: 12px;
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-top: 10px
+}
+
+.deleteTodo {
+  float: right;
+  margin-top: 3vh;
+}
+
+#cbox1:checked+label {
+  color: dimgray;
+  text-decoration: line-through;
+  font-size: 1.5em;
+}
+
+.deleteSubTask {
+  float: right;
+  font-size: 20px
+}

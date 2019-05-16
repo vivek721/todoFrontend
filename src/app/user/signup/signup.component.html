@@ -1,0 +1,73 @@
+<div class="logonbody">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="background-color: rgba(29, 31, 22, 0.9) !important">
+    <a class="navbar-brand" href="/">Meeting App</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" (click)="goToSignIn()">Sign-In</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+
+  <div class="container">
+    <div class="d-flex justify-content-center">
+      <div class="card">
+        <form>
+          <div class="form-group">
+            <label for="firstName">FirstName</label>
+            <input type="text" class="form-control" [(ngModel)]="firstName" name="firstName" id="firstName"
+              placeholder="First Name" />
+          </div>
+          <br />
+          <div class="form-group">
+            <label for="lastName">LastName</label>
+            <input type="text" class="form-control" [(ngModel)]="lastName" name="lastName" id="lastName"
+              placeholder="Last Name" />
+          </div>
+          <br />
+
+          <div class="form-group">
+            <label for="emailId">Email</label>
+            <input type="email" class="form-control" [(ngModel)]="emailId" name="emailId" id="emailId"
+              placeholder="Enter email" />
+          </div>
+          <br />
+          <div>
+            <label for="email">PhoneNumber</label>
+            <div class="form-group form-inline">
+              <select id="country" name="country" [(ngModel)]="selectedValue" class="form-control" required
+                (click)="selectCountryCode()">
+                <option selected>Select Country</option>
+                <option *ngFor="let cntry of country">{{ cntry }}</option>
+              </select>
+              <input type="text" class="form-control" id="countryCode" [value]="selectedCountryCode"
+                placeholder="cntry-code" />
+              <input type="text" class="form-control" id="phoneNumber" [(ngModel)]="phoneNumber" name="phoneNumber"
+                placeholder="Enter Number" />
+            </div>
+          </div>
+
+          <br />
+          <div class="form-group">
+            <label for="userPassword">Password</label>
+            <input type="password" class="form-control" [(ngModel)]="userPassword" id="userPassword"
+              placeholder="Password" name="userPassword" />
+          </div>
+          <br />
+          <div class="d-flex justify-content-center"><button type="submit" class="btn btn-outline-success btn-lg"
+              (click)="onSignUp()">
+              Submit
+            </button></div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

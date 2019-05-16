@@ -1,0 +1,138 @@
+<div class="todoBody h-100">
+
+  <app-todo>
+  </app-todo>
+  <!-- navbar -->
+
+  <div class="container-fluid">
+    <p-sidebar [(visible)]="visibleSidebar1" [style]="{width:'25em'}">
+      <div class="p-4 text-white textCapitalize textCenter">
+        <button (click)="logout()" class="btn btn-danger customButton">
+          Logout
+        </button>
+        <br><br><br>
+
+      </div>
+    </p-sidebar>
+  </div>
+
+
+  <!-- create Button -->
+  <div class="d-flex justify-content-center">
+    <button type="button" class="btn btn-outline-info btn-lg createButton" data-toggle="modal"
+      data-target="#createModal">Add a Todo</button>
+  </div>
+
+  <!-- create Modal -->
+  <div class="modal fade" id="createModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add a Todo</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="onAddTask()">
+            <div class="input-group form-group createInput">
+              <input type="text" [(ngModel)]="itemTitle" name="itemTitle" #mailId="ngModel" class="form-control"
+                placeholder="Add Item" />
+              <span class="pi pi-plus"></span>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-outline-primary" (click)="onAddTask()" data-dismiss="modal">Add
+            Task</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end of Modal -->
+
+  <!-- todo list -->
+  <div style="margin-top: 2%">
+    <p-accordion>
+      <p-accordionTab header="Todo List" [selected]="true">
+        <div class="container-fluid todolist">
+          <div *ngFor="let todo of todos, let i=index">
+            <div class="row" *ngIf="!todo.status">
+              <button type="button" class="btn btn-primary btn-block
+            d-flex todobutton" style="margin-top: 2%;background-color: rgba(168, 198, 216, 0.6)" pButton
+                (dblclick)="setSelectedItem(todo, i)">
+                <input type="checkbox" id="checkbox" (click)="toggleTodoComplete(todo,i)" [checked]="todo.status" />
+                {{todo.title}}
+              </button>
+              <button type="button" class="close deleteTodo" pTooltip="Delete Todo" tooltipPosition="left"
+                aria-label="Close" (click)="deleteTodo(todo.todoId)">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </p-accordionTab>
+
+      <p-accordionTab header="Completed Todo List">
+        <div class="todolist">
+          <div *ngFor="let todo of todos, let i=index">
+            <div class="row" *ngIf="todo.status">
+
+              <button type="button" class="btn btn-primary btn-block
+              d-flex todobutton"
+                style="margin-top: 2%;background-color: rgba(173, 208, 211, 0.4); width:90%; margin-left: 2%" pButton
+                (dblclick)="setSelectedItem(todo, i)">
+                <input type="checkbox" id="checkbox" (click)="toggleTodoComplete(todo)" [checked]="todo.status" />
+                {{todo.title}}
+              </button>
+              <button type="button" class="close deleteTodo" pTooltip="Delete Todo" tooltipPosition="left"
+                aria-label="Close" (click)="deleteTodo(todo.todoId)">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </p-accordionTab>
+    </p-accordion>
+  </div>
+
+
+
+  <!-- end todolist -->
+
+  <!-- todo details -->
+  <p-sidebar [(visible)]="visibleSidebar2" position="right" [baseZIndex]="10000" styleClass="ui-sidebar-md">
+    <div>
+      <b>Item Title:</b> <input type="text" class="form-control" [(ngModel)]="selectedItemTitle" name="itemTitle"
+        placeholder="Item Title">
+      <br>
+      <b>Status:</b><select class="custom-select" [(ngModel)]="selectedItemStatus"
+        (click)="toggleTodoComplete1(selectedItemStatus)">
+        <option value="true">true</option>
+        <option value="false">false</option>
+      </select>
+      <br><br>
+      <b>Sub Task:</b>
+      <div class="input-group form-group createInput">
+        <input type="text" class="form-control" [(ngModel)]="subTaskTitle" name="subTaskTitle"
+          placeholder="To Add a subtask Press Enter" (keyup.enter)="addSubTasks()">
+        <span class="pi pi-plus"></span>
+        <br>
+      </div>
+      <div *ngFor="let subtask of subTasks, let i=index" [ngClass]="subtask.subStatus ? 'strikethrough' : 'null'">
+        <div>
+          <input type="checkbox" [(ngModel)]="subtask.subStatus" id="cbox1" (click)="checkBoxClicked(i)">
+          <label for="cbox3" style="font-size: 1.5em">{{subtask.subTitle}}</label>
+          <i class="deleteSubTask" (click)="deleteSubTask(i)">&times;</i>
+        </div>
+      </div>
+    </div>
+    <button (click)="submitChange()" class="btn btn-success deleteSubTask" style="margin-top: 5%">
+      Submit
+    </button>
+
+  </p-sidebar>
+  <!-- end of todo details -->
+
+</div>
