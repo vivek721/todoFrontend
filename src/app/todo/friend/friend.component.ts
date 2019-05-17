@@ -86,9 +86,6 @@ export class FriendComponent implements OnInit {
         for (let i in this.userData.requestSent) {
           this.sentRequests.push(this.userData.requestSent[i]);
         }
-        console.log(this.userData);
-        console.log(this.recievedRequests);
-        console.log(this.sentRequests);
       },
       error => {
         this.toastr.error("Error while creating todo " + error);
@@ -110,7 +107,6 @@ export class FriendComponent implements OnInit {
     this.friendService.sendFriendRequest(data, this.authToken).subscribe(
       response => {
         this.toastr.success("Friend Request Sent");
-        console.log(response);
         this.getUserDetails();
         this.getAllUser();
       },
@@ -134,7 +130,6 @@ export class FriendComponent implements OnInit {
     this.friendService.acceptFriendRequest(data, this.authToken).subscribe(
       response => {
         this.toastr.success("Friend Request accepted");
-        console.log(response);
         this.getUserDetails();
         this.getAllUser();
       },
@@ -159,7 +154,6 @@ export class FriendComponent implements OnInit {
     this.friendService.rejectFriendRequest(data, this.authToken).subscribe(
       response => {
         this.toastr.success("Friend Request rejected");
-        console.log(response);
         this.getUserDetails();
         this.getAllUser();
       },

@@ -15,9 +15,15 @@ import { TooltipModule } from "primeng/tooltip";
 import { FriendComponent } from "./friend/friend.component";
 import { AccordionModule } from "primeng/accordion";
 import { CardModule } from "primeng/card";
+import { FriendsDashboardComponent } from "./friends-dashboard/friends-dashboard.component";
 
 @NgModule({
-  declarations: [DashboardComponent, TodoComponent, FriendComponent],
+  declarations: [
+    DashboardComponent,
+    TodoComponent,
+    FriendComponent,
+    FriendsDashboardComponent
+  ],
   imports: [
     CommonModule,
     BrowserModule,
@@ -35,7 +41,8 @@ import { CardModule } from "primeng/card";
         component: DashboardComponent
       },
       { path: "", redirectTo: "todo/dashboard", pathMatch: "full" },
-      { path: "todo/friends", component: FriendComponent }
+      { path: "todo/friends", component: FriendComponent },
+      { path: "todo/:userId", component: FriendsDashboardComponent }
     ])
   ],
   bootstrap: [TodoComponent]

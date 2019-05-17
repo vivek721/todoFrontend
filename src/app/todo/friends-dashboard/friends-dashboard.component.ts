@@ -1,19 +1,17 @@
-import { Component, Output, EventEmitter } from "@angular/core";
+import { AppService } from "../../app.service";
+import { Component, OnInit } from "@angular/core";
 import { ToastrService } from "ngx-toastr";
 import { CookieService } from "ngx-cookie-service";
-import { AppService } from "src/app/app.service";
 import { TodoService } from "src/app/todo.service";
-import { Router } from "@angular/router";
-declare const $: any;
+import { Router, ActivatedRoute } from "@angular/router";
+import { FriendService } from "src/app/friend.service";
 
 @Component({
-  selector: "app-dashboard",
-  templateUrl: "./dashboard.component.html",
-  styleUrls: ["./dashboard.component.css"]
+  selector: "app-friends-dashboard",
+  templateUrl: "./friends-dashboard.component.html",
+  styleUrls: ["./friends-dashboard.component.css"]
 })
-export class DashboardComponent {
-  @Output() UserName = new EventEmitter<String>();
-
+export class FriendsDashboardComponent implements OnInit {
   public authToken;
   public userInfo;
   public userId;
@@ -31,33 +29,29 @@ export class DashboardComponent {
   selectedItemStatus: any;
   selectedItemCreatedBy: any;
   userName: string;
+  userData: any;
 
   constructor(
     private toastr: ToastrService,
     private Cookie: CookieService,
     private AppService: AppService,
     private todoService: TodoService,
-    private router: Router
+    private friendService: FriendService,
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.authToken = this.Cookie.get("authtoken");
-    this.userInfo = this.AppService.getUserInfoFromLocalstorage();
-    this.userId = this.Cookie.get("userId");
-    this.userName = this.Cookie.get("userName");
+    this.userId = this.route.snapshot.paramMap.get("userId");
+    this.getUserDetails();
     this.getAllTodoForUser();
   }
 
-  onAddTask() {
-    let data = {
-      title: this.itemTitle,
-      status: false,
-      createdBy: this.userId
-    };
-    this.todoService.createTodo(data, this.authToken).subscribe(
+  getUserDetails() {
+    this.friendService.getUserDetails(this.userId, this.authToken).subscribe(
       response => {
-        this.toastr.success("new Todo Added");
-        this.getAllTodoForUser();
+        this.userData = response["data"];
       },
       error => {
         this.toastr.error("Error while creating todo " + error);

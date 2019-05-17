@@ -11,7 +11,8 @@
                 <i class="pi pi-user d-flex justify-content-center" style="font-size: 4em"></i>
               </p-header>
               <p-footer class=" d-flex justify-content-center">
-                <button pButton type="button" label="View Todo" icon="pi pi-eye" class="ui-button-success"></button>
+                <button pButton type="button" label="View Todo" icon="pi pi-eye" class="ui-button-success"
+                  [routerLink]="[ '/todo', friend.friendId ]"></button>
               </p-footer>
             </p-card>
           </div>
