@@ -1,20 +1,23 @@
 <div class="fullBody">
   <app-todo></app-todo>
-
   <p-accordion>
     <p-accordionTab header="Friends" [selected]="true">
-      <div class="row center-cols center-align d-flex justify-content-center">
-        <div class="col m4" *ngIf="friends != 0">
-          <div *ngFor="let friend of friends, let i = index">
-            <p-card [header]="[friend.friendName | titlecase]" [style]="{width: '200px'}" styleClass="ui-card-shadow">
-              <p-header>
-                <i class="pi pi-user d-flex justify-content-center" style="font-size: 4em"></i>
-              </p-header>
-              <p-footer class=" d-flex justify-content-center">
-                <button pButton type="button" label="View Todo" icon="pi pi-eye" class="ui-button-success"
-                  [routerLink]="[ '/todo', friend.friendId ]"></button>
-              </p-footer>
-            </p-card>
+
+      <div *ngIf="friends != 0">
+        <div class="col-4" *ngFor="let friend of friends, let i = index">
+          <div class="row">
+            <div class="col">
+              <p-card [header]="[friend.friendName | titlecase]" [style]="{width: '200px'}" styleClass="ui-card-shadow">
+                <p-header>
+                  <i class="pi pi-user d-flex justify-content-center" style="font-size: 4em"></i>
+                </p-header>
+                <p-footer class=" d-flex justify-content-center">
+                  <button pButton type="button" label="View Todo" icon="pi pi-eye" class="ui-button-success"
+                    [routerLink]="[ '/todo', friend.friendId ]"></button>
+                </p-footer>
+              </p-card>
+            </div>
+
           </div>
         </div>
       </div>

@@ -6,7 +6,8 @@ import { Observable } from "rxjs";
   providedIn: "root"
 })
 export class FriendService {
-  baseURL = "http://localhost:3000/api/v1/users";
+  private baseURL = "http://api.edvivek.xyz/api/v1/users";
+  /* baseURL = "http://localhost:3000/api/v1/users"; */
 
   constructor(private http: HttpClient) {}
 

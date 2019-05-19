@@ -16,6 +16,8 @@ import { FriendComponent } from "./friend/friend.component";
 import { AccordionModule } from "primeng/accordion";
 import { CardModule } from "primeng/card";
 import { FriendsDashboardComponent } from "./friends-dashboard/friends-dashboard.component";
+import { PaginatorModule } from "primeng/paginator";
+import { NgxPaginationModule } from "ngx-pagination";
 
 @NgModule({
   declarations: [
@@ -28,6 +30,7 @@ import { FriendsDashboardComponent } from "./friends-dashboard/friends-dashboard
     CommonModule,
     BrowserModule,
     BrowserAnimationsModule,
+    PaginatorModule,
     DialogModule,
     SidebarModule,
     ButtonModule,
@@ -35,6 +38,7 @@ import { FriendsDashboardComponent } from "./friends-dashboard/friends-dashboard
     AccordionModule,
     FormsModule,
     CardModule,
+    NgxPaginationModule,
     RouterModule.forChild([
       {
         path: "todo/dashboard",

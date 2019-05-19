@@ -3,6 +3,7 @@ import { Router } from "@angular/router";
 import { CookieService } from "ngx-cookie-service";
 import { AppService } from "../app.service";
 import { ToastrService } from "ngx-toastr";
+import { SocketService } from "../socket.service";
 
 @Component({
   selector: "app-todo",
@@ -19,7 +20,8 @@ export class TodoComponent implements OnInit {
     private router: Router,
     private Cookie: CookieService,
     private AppService: AppService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private SocketService: SocketService
   ) {}
 
   ngOnInit() {
@@ -27,6 +29,7 @@ export class TodoComponent implements OnInit {
     this.userInfo = this.AppService.getUserInfoFromLocalstorage();
     this.userId = this.Cookie.get("userId");
     this.userName = this.Cookie.get("userName");
+    this.showAlertForEvent();
   }
 
   public logout: any = () => {
@@ -40,7 +43,7 @@ export class TodoComponent implements OnInit {
 
           this.Cookie.delete("receiverName");
 
-          /*    this.SocketService.exitSocket(); */
+          this.SocketService.exitSocket();
 
           this.router.navigate(["/"]);
         } else {
@@ -52,4 +55,14 @@ export class TodoComponent implements OnInit {
       }
     );
   }; // end logout
+
+  public showAlertForEvent: any = () => {
+    this.SocketService.alertUser(this.userId).subscribe(data => {
+      this.toastr.info(data.eventOccured + " by " + data.requestSentBy);
+      console.log("an event was " + data.actionPerformed);
+      setTimeout(() => {
+        window.location.reload();
+      }, 3000);
+    });
+  };
 }

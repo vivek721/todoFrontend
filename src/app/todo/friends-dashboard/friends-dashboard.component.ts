@@ -5,6 +5,7 @@ import { CookieService } from "ngx-cookie-service";
 import { TodoService } from "src/app/todo.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { FriendService } from "src/app/friend.service";
+import { SocketService } from "src/app/socket.service";
 
 @Component({
   selector: "app-friends-dashboard",
@@ -30,6 +31,9 @@ export class FriendsDashboardComponent implements OnInit {
   selectedItemCreatedBy: any;
   userName: string;
   userData: any;
+  firstName: any;
+  lastName: any;
+  mainUser: string;
 
   constructor(
     private toastr: ToastrService,
@@ -38,12 +42,14 @@ export class FriendsDashboardComponent implements OnInit {
     private todoService: TodoService,
     private friendService: FriendService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private socketService: SocketService
   ) {}
 
   ngOnInit() {
     this.authToken = this.Cookie.get("authtoken");
     this.userId = this.route.snapshot.paramMap.get("userId");
+    this.mainUser = this.Cookie.get("userName");
     this.getUserDetails();
     this.getAllTodoForUser();
   }
@@ -52,6 +58,10 @@ export class FriendsDashboardComponent implements OnInit {
     this.friendService.getUserDetails(this.userId, this.authToken).subscribe(
       response => {
         this.userData = response["data"];
+        console.log(this.userData);
+        this.firstName = this.userData.firstName;
+        this.lastName = this.userData.lastName;
+        this.getAllTodoForUser();
       },
       error => {
         this.toastr.error("Error while creating todo " + error);
@@ -70,11 +80,18 @@ export class FriendsDashboardComponent implements OnInit {
     );
   }
 
-  deleteTodo(todoId) {
+  deleteTodo(todoId, title) {
+    let eventData = {
+      eventOccured: "Todo with title '" + title + "' is Deleted",
+      requestSentBy: this.mainUser,
+      requestSentTo: this.userData.userId
+    };
+    console.log(eventData);
     this.todoService.deleteTodoById(todoId, this.authToken).subscribe(
       response => {
         this.toastr.success("Todo deleted");
         this.getAllTodoForUser();
+        this.socketService.eventOccured(eventData);
       },
       error => {
         this.toastr.error("Error while creating todo " + error);
@@ -102,11 +119,13 @@ export class FriendsDashboardComponent implements OnInit {
     });
 
     this.submitChange();
+    this.getAllTodoForUser();
   }
   toggleTodoComplete1(status) {
     if (status === "false") {
       this.selectedItemStatus = false;
     }
+    this.getAllTodoForUser();
   }
 
   setSelectedItem(todo, index) {
@@ -120,6 +139,7 @@ export class FriendsDashboardComponent implements OnInit {
     todo.subtasks.forEach(subtask => {
       this.subTasks.push(subtask);
     });
+    this.getAllTodoForUser();
   }
   checkBoxClicked(index) {
     for (let i = 0; i < this.subTasks.length; i++) {
@@ -151,18 +171,47 @@ export class FriendsDashboardComponent implements OnInit {
       title: this.selectedItemTitle,
       status: this.selectedItemStatus,
       subtasks: this.subTasks,
+      canDelete: true,
       createdBy: this.selectedItemCreatedBy
+    };
+    let eventData = {
+      eventOccured:
+        "Todo with title '" + this.selectedItemTitle + "' is changed",
+      requestSentBy: this.mainUser,
+      requestSentTo: this.userData.userId
     };
     this.todoService
       .editTodoById(data, this.authToken, this.selectedTodoId)
       .subscribe(
         response => {
+          this.visibleSidebar2 = false;
           this.toastr.success("Todo Updated Successfully");
           this.getAllTodoForUser();
+          this.socketService.eventOccured(eventData);
         },
         error => {
           this.toastr.error("Error while editing todo " + error);
         }
       );
+  }
+
+  undo() {
+    this.todoService.undoTodo(this.selectedTodoId, this.authToken).subscribe(
+      response => {
+        let eventData = {
+          eventOccured:
+            "Todo with title '" + this.selectedItemTitle + "' is changed",
+          requestSentBy: this.mainUser,
+          requestSentTo: this.userData.userId
+        };
+        this.visibleSidebar2 = false;
+        this.toastr.success("Undo Successfully");
+        this.getAllTodoForUser();
+        this.socketService.eventOccured(eventData);
+      },
+      error => {
+        this.toastr.error("Error while editing todo " + error);
+      }
+    );
   }
 }

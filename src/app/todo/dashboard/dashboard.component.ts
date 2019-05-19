@@ -4,6 +4,7 @@ import { CookieService } from "ngx-cookie-service";
 import { AppService } from "src/app/app.service";
 import { TodoService } from "src/app/todo.service";
 import { Router } from "@angular/router";
+import { SocketService } from "src/app/socket.service";
 declare const $: any;
 
 @Component({
@@ -31,13 +32,15 @@ export class DashboardComponent {
   selectedItemStatus: any;
   selectedItemCreatedBy: any;
   userName: string;
+  disconnectedSocket: boolean;
 
   constructor(
     private toastr: ToastrService,
     private Cookie: CookieService,
     private AppService: AppService,
     private todoService: TodoService,
-    private router: Router
+    private router: Router,
+    private socketService: SocketService
   ) {}
 
   ngOnInit(): void {
@@ -46,6 +49,7 @@ export class DashboardComponent {
     this.userId = this.Cookie.get("userId");
     this.userName = this.Cookie.get("userName");
     this.getAllTodoForUser();
+    this.verifyUserOnline();
   }
 
   onAddTask() {
@@ -108,11 +112,13 @@ export class DashboardComponent {
     });
 
     this.submitChange();
+    this.getAllTodoForUser();
   }
   toggleTodoComplete1(status) {
     if (status === "false") {
       this.selectedItemStatus = false;
     }
+    this.getAllTodoForUser();
   }
 
   setSelectedItem(todo, index) {
@@ -126,6 +132,7 @@ export class DashboardComponent {
     todo.subtasks.forEach(subtask => {
       this.subTasks.push(subtask);
     });
+    this.getAllTodoForUser();
   }
   checkBoxClicked(index) {
     for (let i = 0; i < this.subTasks.length; i++) {
@@ -133,6 +140,7 @@ export class DashboardComponent {
         this.subTasks[i].subStatus = !this.subTasks[i].subStatus;
       }
     }
+    this.getAllTodoForUser();
   }
 
   addSubTasks() {
@@ -146,6 +154,7 @@ export class DashboardComponent {
       this.subTasks.push(x);
       this.subTaskTitle = "";
     }
+    this.getAllTodoForUser();
   }
 
   deleteSubTask(i) {
@@ -157,12 +166,14 @@ export class DashboardComponent {
       title: this.selectedItemTitle,
       status: this.selectedItemStatus,
       subtasks: this.subTasks,
+      canDelete: true,
       createdBy: this.selectedItemCreatedBy
     };
     this.todoService
       .editTodoById(data, this.authToken, this.selectedTodoId)
       .subscribe(
         response => {
+          this.visibleSidebar2 = false;
           this.toastr.success("Todo Updated Successfully");
           this.getAllTodoForUser();
         },
@@ -171,4 +182,32 @@ export class DashboardComponent {
         }
       );
   }
+
+  undo() {
+    this.todoService.undoTodo(this.selectedTodoId, this.authToken).subscribe(
+      response => {
+        this.visibleSidebar2 = false;
+        this.toastr.success("Undo Successfully");
+        this.getAllTodoForUser();
+      },
+      error => {
+        this.toastr.error("Error while editing todo " + error);
+      }
+    );
+  }
+
+  //Socket events
+  public verifyUserOnline: any = () => {
+    this.socketService.verifyUser().subscribe(data => {
+      this.disconnectedSocket = false;
+      this.socketService.setUser(this.authToken);
+    });
+  };
+
+  public showAlertForEvent: any = () => {
+    this.socketService.alertUser(this.userId).subscribe(data => {
+      this.toastr.success("a todo was " + data);
+      console.log("a todo was " + data);
+    });
+  };
 }

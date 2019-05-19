@@ -3,6 +3,7 @@ import { FriendService } from "src/app/friend.service";
 import { CookieService } from "ngx-cookie-service";
 import { AppService } from "src/app/app.service";
 import { ToastrService } from "ngx-toastr";
+import { SocketService } from "src/app/socket.service";
 
 @Component({
   selector: "app-friend",
@@ -24,7 +25,8 @@ export class FriendComponent implements OnInit {
     private friendService: FriendService,
     private Cookie: CookieService,
     private AppService: AppService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private socketService: SocketService
   ) {}
 
   ngOnInit() {
@@ -100,6 +102,11 @@ export class FriendComponent implements OnInit {
       requestedId: recieverId,
       requestedName: recieverName
     };
+    let eventData = {
+      eventOccured: "friend Request sent",
+      requestSentBy: this.userName,
+      requestSentTo: recieverId
+    };
     this.allUsers = [];
     this.friends = [];
     this.sentRequests = [];
@@ -109,6 +116,7 @@ export class FriendComponent implements OnInit {
         this.toastr.success("Friend Request Sent");
         this.getUserDetails();
         this.getAllUser();
+        this.socketService.eventOccured(eventData);
       },
       error => {
         this.toastr.error("Error while Sending Friend Request " + error);
@@ -123,6 +131,11 @@ export class FriendComponent implements OnInit {
       requestedId: recieverId,
       requestedName: recieverName
     };
+    let eventData = {
+      eventOccured: "friend Request accepted",
+      requestSentBy: this.userName,
+      requestSentTo: recieverId
+    };
     this.allUsers = [];
     this.friends = [];
     this.sentRequests = [];
@@ -132,6 +145,8 @@ export class FriendComponent implements OnInit {
         this.toastr.success("Friend Request accepted");
         this.getUserDetails();
         this.getAllUser();
+        this.socketService.eventOccured(eventData);
+        1;
       },
       error => {
         this.toastr.error("Error while accepting Friend Request " + error);
@@ -146,6 +161,11 @@ export class FriendComponent implements OnInit {
       requestedId: recieverId,
       requestedName: recieverName
     };
+    let eventData = {
+      eventOccured: "friend Request Rejected",
+      requestSentBy: this.userName,
+      requestSentTo: recieverId
+    };
     console.log(data);
     this.allUsers = [];
     this.friends = [];
@@ -156,6 +176,7 @@ export class FriendComponent implements OnInit {
         this.toastr.success("Friend Request rejected");
         this.getUserDetails();
         this.getAllUser();
+        this.socketService.eventOccured(eventData);
       },
       error => {
         this.toastr.error("Error while rejecting Friend Request " + error);

@@ -7,7 +7,8 @@ import { Observable } from "rxjs";
   providedIn: "root"
 })
 export class TodoService {
-  baseURL = "http://localhost:3000/api/v1/todo";
+  private baseURL = "http://api.edvivek.xyz/api/v1/todo";
+  /* baseURL = "http://localhost:3000/api/v1/todo"; */
   constructor(private http: HttpClient) {}
 
   createTodo(data, authToken): Observable<any> {
@@ -15,8 +16,6 @@ export class TodoService {
       .set("title", data.title)
       .set("status", data.status)
       .set("createdBy", data.createdBy);
-
-    console.log(params);
     return this.http.post(
       `${this.baseURL}/create?authToken=${authToken}`,
       params
@@ -40,6 +39,12 @@ export class TodoService {
     return this.http.post(
       `${this.baseURL}/${todoId}/delete?authToken=${authToken}`,
       todoId
+    );
+  }
+
+  undoTodo(todoId, authToken) {
+    return this.http.get(
+      `${this.baseURL}/${todoId}/undoTodo?authToken=${authToken}`
     );
   }
 }

@@ -57,7 +57,7 @@
     <p-accordion>
       <p-accordionTab header="Todo List" [selected]="true">
         <div class="container-fluid todolist">
-          <div *ngFor="let todo of todos, let i=index">
+          <div *ngFor="let todo of todos | paginate: { itemsPerPage: 5, currentPage: p,id:'first'  }, let i=index">
             <div class="row" *ngIf="!todo.status">
               <button type="button" class="btn btn-primary btn-block
             d-flex todobutton" style="margin-top: 2%;background-color: rgba(168, 198, 216, 0.6)" pButton
@@ -72,11 +72,15 @@
             </div>
           </div>
         </div>
+        <br>
+        <div style="margin-left: -5%">
+          <pagination-controls id="first" (pageChange)="p = $event"></pagination-controls>
+        </div>
       </p-accordionTab>
 
       <p-accordionTab header="Completed Todo List">
         <div class="todolist">
-          <div *ngFor="let todo of todos, let i=index">
+          <div *ngFor="let todo of todos | paginate: { itemsPerPage: 5, currentPage: p, id:'second' }, let i=index">
             <div class="row" *ngIf="todo.status">
 
               <button type="button" class="btn btn-primary btn-block
@@ -93,6 +97,9 @@
             </div>
           </div>
         </div>
+        <div style="margin-left: -5%">
+          <pagination-controls id="second" (pageChange)="q = $event"></pagination-controls>
+        </div>
       </p-accordionTab>
     </p-accordion>
   </div>
@@ -103,9 +110,10 @@
 
   <!-- todo details -->
   <p-sidebar [(visible)]="visibleSidebar2" position="right" [baseZIndex]="10000" styleClass="ui-sidebar-md">
+
     <div>
       <b>Item Title:</b> <input type="text" class="form-control" [(ngModel)]="selectedItemTitle" name="itemTitle"
-        placeholder="Item Title">
+        placeholder="Item Title" (keydown.control.z)="undo()">
       <br>
       <b>Status:</b><select class="custom-select" [(ngModel)]="selectedItemStatus"
         (click)="toggleTodoComplete1(selectedItemStatus)">
@@ -116,7 +124,7 @@
       <b>Sub Task:</b>
       <div class="input-group form-group createInput">
         <input type="text" class="form-control" [(ngModel)]="subTaskTitle" name="subTaskTitle"
-          placeholder="To Add a subtask Press Enter" (keyup.enter)="addSubTasks()">
+          placeholder="To Add a subtask Press Enter" (keyup.enter)="addSubTasks()" (keydown.control.z)="undo()">
         <span class="pi pi-plus"></span>
         <br>
       </div>
@@ -130,6 +138,9 @@
     </div>
     <button (click)="submitChange()" class="btn btn-success deleteSubTask" style="margin-top: 5%">
       Submit
+    </button>
+    <button (click)="undo()" class="btn btn-info deleteSubTask" style="margin-top: 5%; margin-right: 72%">
+      Undo
     </button>
 
   </p-sidebar>
